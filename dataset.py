@@ -77,10 +77,10 @@ class DataLoaderVal(Dataset):
         super(DataLoaderVal, self).__init__()
 
         self.target_transform = target_transform
-
-        gt_dir = 'test_C_fixed_official'
-
-        # gt_dir = 'train_C'
+        if plus:
+            gt_dir = 'test_C_fixed_official'
+        else:
+            gt_dir = 'train_C'
         input_dir = 'train_A'
         mask_dir = 'train_B'
         

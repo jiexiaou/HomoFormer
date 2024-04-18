@@ -44,9 +44,9 @@ parser.add_argument('--global_skip', action='store_true', default=False, help='g
 parser.add_argument('--local_skip', action='store_true', default=False, help='local skip connection')
 parser.add_argument('--vit_share', action='store_true', default=False, help='share vit module')
 parser.add_argument('--train_ps', type=int, default=320, help='patch size of training sample')
-parser.add_argument('--tile', type=int, default=256, help='Tile size (e.g 720). None means testing on the original resolution image')
+parser.add_argument('--tile', type=int, default=384, help='Tile size (e.g 720). None means testing on the original resolution image')
 parser.add_argument('--tile_overlap', type=int, default=30, help='Overlapping of different tiles')
-
+parser.add_argument('--plus', action='store_true', default=False)
 parser.add_argument('--repeat', type=int, default=16)
 parser.add_argument('--base_repeat', type=int, default=8)
 args = parser.parse_args()
@@ -57,7 +57,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
 
 utils.mkdir(args.result_dir)
 
-test_dataset = get_validation_data(args.input_dir)
+test_dataset = get_validation_data(args.input_dir, plus=args.plus)
 test_loader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False, num_workers=8, drop_last=False)
 
 model_restoration = utils.get_arch(args)
@@ -82,7 +82,7 @@ with torch.no_grad():
     rmse_val_s = []
     rmse_val_ns = []
 
-    for ii, data_test in enumerate(test_loader, 0):
+    for ii, data_test in tqdm(enumerate(test_loader, 0)):
         restored_list = []
         filenames = data_test[3]
         B, C, H, W = data_test[1].shape
