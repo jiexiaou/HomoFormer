@@ -45,7 +45,7 @@ class Options():
         parser.add_argument('--vit_share', action='store_true', default=False, help='share vit module')
         
         # args for training
-        parser.add_argument('--train_ps', type=int, default=256, help='patch size of training sample')
+        parser.add_argument('--train_ps', type=int, default=384, help='patch size of training sample')
         parser.add_argument('--resume', action='store_true', default=False)
         parser.add_argument('--train_dir', type=str, default ='/gdata2/xiaojie/Dataset/ISTD_Dataset/train',  help='dir of train data')
         parser.add_argument('--val_dir', type=str, default ='/gdata2/xiaojie/Dataset/ISTD_Dataset/test',  help='dir of train data')

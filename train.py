@@ -147,7 +147,7 @@ for epoch in range(start_epoch, opt.nepoch + 1):
         if epoch > 5:
             target, input_, mask = utils.MixUp_AUG().aug(target, input_, mask)
         with torch.cuda.amp.autocast():
-            restored = model_restoration(input_)
+            restored = model_restoration(input_, mask)
             restored = torch.clamp(restored,0,1)
             loss = criterion(restored, target)
         loss_scaler(
@@ -167,7 +167,7 @@ for epoch in range(start_epoch, opt.nepoch + 1):
                     mask = data_val[2].cuda()
                     filenames = data_val[3]
                     with torch.cuda.amp.autocast():
-                        restored = model_restoration(input_)
+                        restored = model_restoration(input_, mask)
                     restored = torch.clamp(restored,0,1)
                     psnr_val_rgb.append(utils.batch_PSNR(restored, target, False).item())
 
